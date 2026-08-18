@@ -1,0 +1,21 @@
+# 密钥与本地配置 —— 机械防线，规则 10 的兜底
+.env
+*.key
+*.pem
+
+# Obsidian 工作区状态（个人视图配置，不入库）
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 原始交付包，本地备份，不入库
+*.zip
