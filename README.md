@@ -48,7 +48,8 @@ python3 tools/tg_group_export.py --chat-id <群ID> --out <目标库>/raw/clips
 ## 分享给别人看
 
 - 私有 GitHub 仓库 + 邀请协作者（零成本）
-- [Quartz](https://github.com/jackyzha0/quartz) 把 wiki/ 构建成静态站（双链/图谱/搜索齐全），托管到 Cloudflare Pages + Access 做私密访问
+- [Quartz](https://github.com/jackyzha0/quartz) 把 wiki/ 构建成静态站（双链/图谱/搜索齐全），托管到 Cloudflare Pages（免费、不绑卡）
+- 私密访问：`tools/deploy_kb_site.sh` 一条龙——构建 + Basic Auth 密码门禁（Pages Worker 实现，无需 Zero Trust）+ noindex + 部署
 
 ## 依赖
 

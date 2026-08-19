@@ -1,7 +1,7 @@
 """从 telegram-search 的 postgres 导出某个群里 bot 发的视频文字稿，落盘为 raw/clips/*.md。
 
 用法:
-    python3 tools/tg_group_export.py --chat-id <群ID> --out ~/pkb-friend/raw/clips
+    python3 tools/tg_group_export.py --chat-id <群ID> --out <目标库>/raw/clips
 
 设计约束（与 telegram_archive.py 同构）:
 - 只保存文字稿（原始层）。"📝 AI 梳理"是派生内容，跳过。
@@ -27,6 +27,8 @@ TITLE_RE = re.compile(r"^视频标题：(.+)")
 URL_RE = re.compile(r"🔗\s*(https?://\S+)")
 BODY_MARK_RE = re.compile(r"^(原文案|文案)：\s*$", re.M)
 SKIP_PREFIXES = ("⏳", "❌", "📝 AI 梳理", "✅")
+# 管道噪音行:本地文件路径等,出现在 bot 消息尾部,不属于文案内容
+NOISE_LINE_RE = re.compile(r"^.*(📁 |/Users/|C:\\Users).*$", re.M)
 
 # 与 telegram_archive.py 保持一致
 PLATFORM_PATTERNS = [
@@ -83,8 +85,10 @@ def parse_records(messages: list[dict]) -> list[dict]:
     cur: dict | None = None
 
     def close(rec: dict | None) -> None:
-        if rec and rec.get("transcript", "").strip():
-            records.append(rec)
+        if rec:
+            rec["transcript"] = NOISE_LINE_RE.sub("", rec.get("transcript", "")).strip()
+            if rec["transcript"]:
+                records.append(rec)
 
     for m in messages:
         if m["from_name"] not in BOT_SENDERS:
